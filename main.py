@@ -244,4 +244,3 @@ elif pilihan == "▶️ Streaming History":
         st.pyplot(fig)
     
     st.divider()
-    
