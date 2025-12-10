@@ -245,12 +245,3 @@ elif pilihan == "▶️ Streaming History":
     
     st.divider()
     
-    # Download CSV
-    if st.button("📥 Download Data Streaming (CSV)", use_container_width=True):
-        csv = df_streaming.to_csv(index=False)
-        st.download_button(
-            label="💾 Download CSV",
-            data=csv,
-            file_name="streaming_history.csv",
-            mime="text/csv"
-        )
