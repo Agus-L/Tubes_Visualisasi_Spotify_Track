@@ -21,12 +21,13 @@ def load_data():
     track_artists = get_track_artists()
     
     # Ubah ke DataFrame
-    df_tracks = pd.DataFrame(tracks, columns=["track_id", "track_name", "duration_ms", "album_name", "genre_name", "artist_count"])
+    df_tracks = pd.DataFrame(tracks, columns=["track_id", "track_name", "duration_ms", "album_name", "genre_name", "artist_names", "artist_count"])
     df_albums = pd.DataFrame(albums, columns=["album_id", "album_name", "release_date"])
     df_genres = pd.DataFrame(genres, columns=["genre_id", "genre_name"])
+
     df_artists = pd.DataFrame(artists, columns=["artist_id", "artist_name", "country_origin"])
     df_features = pd.DataFrame(features, columns=["track_id", "track_name", "danceability", "energy", "valence", "acousticness", "tempo", "loudness", "popularity"])
-    df_streaming = pd.DataFrame(streaming, columns=["history_id", "track_id", "track_name", "user_id", "played_at", "duration_sec", "platform"])
+    df_streaming = pd.DataFrame(streaming, columns=["history_id", "track_id", "track_name", "user_id", "gender", "region_code", "age_group", "played_at", "duration_sec", "platform"])
     df_track_artists = pd.DataFrame(track_artists, columns=["track_id", "track_name", "artist_id", "artist_name", "is_main"])
     
     return df_tracks, df_albums, df_genres, df_artists, df_features, df_streaming, df_track_artists
@@ -96,91 +97,160 @@ elif pilihan == "🎵 Data Lagu":
     else:
         hasil = df_tracks
     
-    st.table(hasil)
+    st.divider()
+    
+    # Filter kolom yang ditampilkan
+    display_columns = st.multiselect(
+        "📋 Pilih Kolom yang Ditampilkan:",
+        ["track_name", "duration_ms", "album_name", "genre_name", "artist_names", "artist_count"],
+        default=["track_name", "album_name", "genre_name", "artist_names"]
+    )
+    
+    if display_columns:
+        df_display = hasil[display_columns].copy()
+        if 'duration_ms' in df_display.columns:
+            df_display['duration_ms'] = (df_display['duration_ms'] / 60000).round(2).astype(str) + ' min'
+        st.dataframe(df_display, use_container_width=True, hide_index=True)
 
 # ===== HALAMAN 3: DATA ALBUM =====
 elif pilihan == "💿 Data Album":
     st.subheader("💿 Daftar Semua Album")
     st.metric("Total", len(df_albums))
-    st.table(df_albums)
+    
+    st.divider()
+    
+    # Filter kolom yang ditampilkan
+    display_columns = st.multiselect(
+        "📋 Pilih Kolom yang Ditampilkan:",
+        ["album_name", "release_date"],
+        default=["album_name", "release_date"]
+    )
+    
+    if display_columns:
+        df_display = df_albums[display_columns].copy()
+        st.dataframe(df_display, use_container_width=True, hide_index=True)
 
 # ===== HALAMAN 4: DATA GENRE =====
 elif pilihan == "🎼 Data Genre":
     st.subheader("🎼 Daftar Semua Genre")
     st.metric("Total", len(df_genres))
-    st.table(df_genres)
+    
+    st.divider()
+    
+    # Filter kolom yang ditampilkan
+    display_columns = st.multiselect(
+        "📋 Pilih Kolom yang Ditampilkan:",
+        ["genre_id", "genre_name"],
+        default=["genre_name"]
+    )
+    
+    if display_columns:
+        df_display = df_genres[display_columns].copy()
+        st.dataframe(df_display, use_container_width=True, hide_index=True)
 
 # ===== HALAMAN 5: DATA ARTIS =====
 elif pilihan == "🎤 Data Artis":
     st.subheader("🎤 Daftar Semua Artis")
     st.metric("Total", len(df_artists))
     
-    # Filter berdasarkan negara
-    negara = st.multiselect("Filter Negara:", df_artists['country_origin'].unique())
-    if negara:
-        hasil = df_artists[df_artists['country_origin'].isin(negara)]
-    else:
-        hasil = df_artists
+    st.divider()
     
-    st.table(hasil)
+    # Filter kolom yang ditampilkan
+    display_columns = st.multiselect(
+        "📋 Pilih Kolom yang Ditampilkan:",
+        ["artist_id", "artist_name", "country_origin"],
+        default=["artist_name", "country_origin"]
+    )
+    
+    if display_columns:
+        df_display = df_artists[display_columns].copy()
+        st.dataframe(df_display, use_container_width=True, hide_index=True)
 
 # ===== HALAMAN 6: AUDIO FEATURES =====
 elif pilihan == "🎚️ Audio Features":
     st.subheader("🎚️ Karakteristik Audio Lagu")
-    st.table(df_features)
+    
+    st.divider()
+    
+    # Filter kolom yang ditampilkan
+    display_columns = st.multiselect(
+        "📋 Pilih Kolom yang Ditampilkan:",
+        ["track_name", "danceability", "energy", "valence", "acousticness", "tempo", "loudness", "popularity"],
+        default=["track_name", "danceability", "energy", "tempo", "popularity"]
+    )
+    
+    if display_columns:
+        df_display = df_features[display_columns].copy()
+        st.dataframe(df_display, use_container_width=True, hide_index=True)
 
 # ===== HALAMAN 7: STREAMING HISTORY =====
 elif pilihan == "▶️ Streaming History":
-    st.subheader("▶️ Riwayat Streaming")
-    st.metric("Total Streaming", len(df_streaming))
-    st.table(df_streaming)
-
-# ===== FOOTER DENGAN GENERATE DASHBOARD BUTTON =====
-st.divider()
-st.subheader("💾 Export Data & Visualisasi")
-
-if st.button("📊 Generate dan Simpan Chart + CSV", use_container_width=True):
-    st.info("Membuat visualisasi dan mengexport data...")
+    st.subheader("▶️ Riwayat Streaming Pengguna")
     
-    os.makedirs('outputs', exist_ok=True)
+    # Tampilkan 3 metric
+    col1, col2, col3 = st.columns(3)
+    col1.metric("📊 Total Streaming", len(df_streaming))
+    col2.metric("👥 Unique Users", df_streaming['user_id'].nunique())
+    col3.metric("🎵 Unique Tracks", df_streaming['track_id'].nunique())
     
-    # Chart 1
-    fig, ax = plt.subplots(figsize=(10, 5))
-    genre_counts = df_tracks['genre_name'].value_counts()
-    genre_counts.plot(kind='barh', ax=ax, color='#1DB954')
-    ax.set_xlabel("Jumlah Lagu")
-    ax.set_title("Lagu per Genre")
-    plt.tight_layout()
-    plt.savefig('outputs/01_tracks_per_genre.png', dpi=100)
-    plt.close()
+    st.divider()
     
-    # Chart 2
-    fig, ax = plt.subplots(figsize=(10, 5))
-    artist_counts = df_track_artists['artist_name'].value_counts().head(10)
-    artist_counts.plot(kind='barh', ax=ax, color='#FF6B6B')
-    ax.set_xlabel("Jumlah Lagu")
-    ax.set_title("Top 10 Artis")
-    plt.tight_layout()
-    plt.savefig('outputs/02_top_10_artists.png', dpi=100)
-    plt.close()
+    # Tampilkan data dengan kolom yang dipilih
+    display_columns = st.multiselect(
+        "📋 Pilih Kolom yang Ditampilkan:",
+        ["track_name", "user_id", "gender", "region_code", "age_group", "played_at", "duration_sec", "platform"],
+        default=["track_name", "gender", "region_code", "platform", "played_at"]
+    )
     
-    # Chart 3
-    fig, ax = plt.subplots(figsize=(10, 5))
-    duration = df_tracks.groupby('genre_name')['duration_ms'].mean() / 60000
-    duration.sort_values(ascending=False).plot(kind='bar', ax=ax, color='#4ECDC4')
-    ax.set_ylabel("Durasi (Menit)")
-    ax.set_title("Durasi Rata-rata per Genre")
-    plt.tight_layout()
-    plt.savefig('outputs/03_duration_per_genre.png', dpi=100)
-    plt.close()
+    if display_columns:
+        st.subheader("📊 Data Streaming")
+        
+        # Format tampilan yang lebih readable
+        df_display = df_streaming[display_columns].copy()
+        
+        # Format kolom jika ada
+        if 'played_at' in df_display.columns:
+            df_display['played_at'] = pd.to_datetime(df_display['played_at']).dt.strftime('%Y-%m-%d %H:%M:%S')
+        
+        if 'duration_sec' in df_display.columns:
+            df_display['duration_sec'] = df_display['duration_sec'].astype('int64').astype(str) + ' sec'
+        
+        # Tampilkan dengan pagination
+        st.dataframe(df_display, use_container_width=True, hide_index=True)
     
-    # Export CSV
-    df_tracks.to_csv('outputs/tracks_data.csv', index=False)
-    df_albums.to_csv('outputs/albums_data.csv', index=False)
-    df_genres.to_csv('outputs/genres_data.csv', index=False)
-    df_artists.to_csv('outputs/artists_data.csv', index=False)
-    df_features.to_csv('outputs/audio_features_data.csv', index=False)
-    df_track_artists.to_csv('outputs/track_artist_bridge.csv', index=False)
+    st.divider()
     
-    st.success("✅ Selesai! 3 chart PNG + 6 CSV file tersimpan di folder 'outputs/'")
-    st.info("📁 Buka folder 'outputs' untuk melihat hasil")
+    # Analisis Tambahan
+    st.subheader("📈 Analisis Streaming")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.write("**Streaming by Gender**")
+        gender_dist = df_streaming['gender'].value_counts()
+        fig, ax = plt.subplots(figsize=(8, 4))
+        gender_dist.plot(kind='bar', ax=ax, color='#1DB954')
+        ax.set_xlabel("Gender")
+        ax.set_ylabel("Jumlah Streaming")
+        plt.xticks(rotation=0)
+        st.pyplot(fig)
+    
+    with col2:
+        st.write("**Streaming by Region**")
+        region_dist = df_streaming['region_code'].value_counts().head(10)
+        fig, ax = plt.subplots(figsize=(8, 4))
+        region_dist.plot(kind='barh', ax=ax, color='#FF6B6B')
+        ax.set_xlabel("Jumlah Streaming")
+        st.pyplot(fig)
+    
+    st.divider()
+    
+    # Download CSV
+    if st.button("📥 Download Data Streaming (CSV)", use_container_width=True):
+        csv = df_streaming.to_csv(index=False)
+        st.download_button(
+            label="💾 Download CSV",
+            data=csv,
+            file_name="streaming_history.csv",
+            mime="text/csv"
+        )

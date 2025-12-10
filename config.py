@@ -13,7 +13,7 @@ cursor = db.cursor()
 
 # Fungsi ambil semua data lagu
 def get_tracks():
-    """Ambil semua data lagu dengan album, genre, dan jumlah artis"""
+    """Ambil semua data lagu dengan album, genre, artis, dan jumlah artis"""
     cursor.execute('''
         SELECT 
             t.track_internal_id,
@@ -21,11 +21,13 @@ def get_tracks():
             t.duration_ms,
             al.album_name,
             g.genre_name,
+            GROUP_CONCAT(DISTINCT a.artist_name SEPARATOR ', ') as artist_names,
             COUNT(DISTINCT tab.artist_id) as artist_count
         FROM Tracks t
         JOIN Albums al ON t.album_id = al.album_id
         JOIN Genres g ON t.genre_id = g.genre_id
         LEFT JOIN Track_Artist_Bridge tab ON t.track_internal_id = tab.track_internal_id
+        LEFT JOIN Artists a ON tab.artist_id = a.artist_id
         GROUP BY t.track_internal_id, t.track_name, t.duration_ms, al.album_name, g.genre_name
         ORDER BY t.track_internal_id ASC
     ''')
@@ -78,11 +80,15 @@ def get_streaming():
             sh.track_internal_id,
             t.track_name,
             sh.user_id,
+            u.gender,
+            u.region_code,
+            u.age_group,
             sh.played_at,
             sh.play_duration_sec,
             sh.platform
         FROM Streaming_History sh
         JOIN Tracks t ON sh.track_internal_id = t.track_internal_id
+        JOIN Users u ON sh.user_id = u.user_id
         ORDER BY sh.played_at DESC
     ''')
     return cursor.fetchall()
