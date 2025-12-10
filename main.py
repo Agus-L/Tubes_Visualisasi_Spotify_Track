@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import os
 from config import get_tracks, get_albums, get_genres, get_artists, get_audio_features, get_streaming, get_track_artists
 
 # ===== KONFIGURASI HALAMAN =====
