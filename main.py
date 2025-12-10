@@ -20,14 +20,13 @@ def load_data():
     track_artists = get_track_artists()
     
     # Ubah ke DataFrame
-    df_tracks = pd.DataFrame(tracks, columns=["track_id", "track_name", "duration_ms", "album_name", "genre_name", "artist_names", "artist_count"])
+    df_tracks = pd.DataFrame(tracks, columns=["track_internal_id", "track_name", "duration_ms", "album_name", "genre_name", "artist_names", "artist_count"])
     df_albums = pd.DataFrame(albums, columns=["album_id", "album_name", "release_date"])
     df_genres = pd.DataFrame(genres, columns=["genre_id", "genre_name"])
-
     df_artists = pd.DataFrame(artists, columns=["artist_id", "artist_name", "country_origin"])
-    df_features = pd.DataFrame(features, columns=["track_id", "track_name", "danceability", "energy", "valence", "acousticness", "tempo", "loudness", "popularity"])
-    df_streaming = pd.DataFrame(streaming, columns=["history_id", "track_id", "track_name", "user_id", "gender", "region_code", "age_group", "played_at", "duration_sec", "platform"])
-    df_track_artists = pd.DataFrame(track_artists, columns=["track_id", "track_name", "artist_id", "artist_name", "is_main"])
+    df_features = pd.DataFrame(features, columns=["track_internal_id", "track_name", "danceability", "energy", "valence", "acousticness", "tempo", "loudness", "popularity"])
+    df_streaming = pd.DataFrame(streaming, columns=["history_id", "track_internal_id", "track_name", "user_id", "gender", "region_code", "age_group", "played_at", "duration_sec", "platform"])
+    df_track_artists = pd.DataFrame(track_artists, columns=["track_internal_id", "track_name", "artist_id", "artist_name", "is_main"])
     
     return df_tracks, df_albums, df_genres, df_artists, df_features, df_streaming, df_track_artists
 
@@ -42,6 +41,7 @@ pilihan = st.sidebar.radio("Pilih Halaman:", [
     "💿 Data Album",
     "🎼 Data Genre",
     "🎤 Data Artis",
+    "🎵 Track-Artis",
     "🎚️ Audio Features",
     "▶️ Streaming History"
 ])
@@ -58,6 +58,7 @@ if pilihan == "📊 Dashboard":
     col4.metric("🎤 Total Artis", len(df_artists))
     
     st.divider()
+
     
     # Chart 1: Lagu per Genre
     st.subheader("📈 Lagu per Genre")
@@ -67,7 +68,7 @@ if pilihan == "📊 Dashboard":
     ax1.set_xlabel("Jumlah Lagu")
     st.pyplot(fig1)
     
-    # Chart 2: Top 10 Artis
+    # Chart 2: Top 10 Artis     
     st.subheader("🎤 Top 10 Artis")
     artist_counts = df_track_artists['artist_name'].value_counts().head(10)
     fig2, ax2 = plt.subplots(figsize=(10, 5))
@@ -101,8 +102,8 @@ elif pilihan == "🎵 Data Lagu":
     # Filter kolom yang ditampilkan
     display_columns = st.multiselect(
         "📋 Pilih Kolom yang Ditampilkan:",
-        ["track_name", "duration_ms", "album_name", "genre_name", "artist_names", "artist_count"],
-        default=["track_name", "album_name", "genre_name", "artist_names"]
+        ["track_internal_id", "track_name", "duration_ms", "album_name", "genre_name", "artist_names", "artist_count"],
+        default=["track_internal_id", "track_name", "album_name", "genre_name", "artist_names"]
     )
     
     if display_columns:
@@ -121,8 +122,8 @@ elif pilihan == "💿 Data Album":
     # Filter kolom yang ditampilkan
     display_columns = st.multiselect(
         "📋 Pilih Kolom yang Ditampilkan:",
-        ["album_name", "release_date"],
-        default=["album_name", "release_date"]
+        ["album_id", "album_name", "release_date"],
+        default=["album_id", "album_name", "release_date"]
     )
     
     if display_columns:
@@ -165,7 +166,50 @@ elif pilihan == "🎤 Data Artis":
         df_display = df_artists[display_columns].copy()
         st.dataframe(df_display, use_container_width=True, hide_index=True)
 
-# ===== HALAMAN 6: AUDIO FEATURES =====
+# ===== HALAMAN 6: TRACK-ARTIS =====
+elif pilihan == "🎵 Track-Artis":
+    st.subheader("🎵 Hubungan Lagu & Artis (Main vs Featured)")
+    st.metric("Total Data", len(df_track_artists))
+    
+    st.divider()
+    
+    # Filter kolom yang ditampilkan
+    display_columns = st.multiselect(
+        "📋 Pilih Kolom yang Ditampilkan:",
+        ["track_internal_id", "track_name", "artist_id", "artist_name", "is_main"],
+        default=["track_internal_id", "track_name", "artist_id", "artist_name", "is_main"]
+    )
+    
+    if display_columns:
+        df_display = df_track_artists[display_columns].copy()
+        # Ubah is_main jadi lebih readable
+        if 'is_main' in df_display.columns:
+            df_display['is_main'] = df_display['is_main'].apply(lambda x: "✓ Main Artist" if x == 1 else "- Featured")
+        st.dataframe(df_display, use_container_width=True, hide_index=True)
+    
+    st.divider()
+    
+    # Analisis: Main vs Featured
+    st.subheader("📊 Analisis Main Artist vs Featured")
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.write("**Distribusi Main vs Featured**")
+        main_counts = df_track_artists['is_main'].value_counts()
+        fig, ax = plt.subplots(figsize=(8, 4))
+        labels = ['✓ Main Artist', '- Featured'] if 1 in main_counts.index else ['- Featured']
+        ax.pie(main_counts, labels=labels, autopct='%1.1f%%', colors=['#1DB954', '#FF6B6B'])
+        st.pyplot(fig)
+    
+    with col2:
+        st.write("**Top Artists (Main Only)**")
+        main_artists = df_track_artists[df_track_artists['is_main'] == 1]['artist_name'].value_counts().head(10)
+        fig, ax = plt.subplots(figsize=(8, 4))
+        main_artists.plot(kind='barh', ax=ax, color='#1DB954')
+        ax.set_xlabel("Jumlah Lagu (Main Artist)")
+        st.pyplot(fig)
+
+# ===== HALAMAN 7: AUDIO FEATURES =====
 elif pilihan == "🎚️ Audio Features":
     st.subheader("🎚️ Karakteristik Audio Lagu")
     
@@ -174,8 +218,8 @@ elif pilihan == "🎚️ Audio Features":
     # Filter kolom yang ditampilkan
     display_columns = st.multiselect(
         "📋 Pilih Kolom yang Ditampilkan:",
-        ["track_name", "danceability", "energy", "valence", "acousticness", "tempo", "loudness", "popularity"],
-        default=["track_name", "danceability", "energy", "tempo", "popularity"]
+        ["track_internal_id", "track_name", "danceability", "energy", "valence", "acousticness", "tempo", "loudness", "popularity"],
+        default=["track_internal_id", "track_name", "danceability", "energy", "tempo", "popularity"]
     )
     
     if display_columns:
@@ -197,8 +241,8 @@ elif pilihan == "▶️ Streaming History":
     # Tampilkan data dengan kolom yang dipilih
     display_columns = st.multiselect(
         "📋 Pilih Kolom yang Ditampilkan:",
-        ["track_name", "user_id", "gender", "region_code", "age_group", "played_at", "duration_sec", "platform"],
-        default=["track_name", "gender", "region_code", "platform", "played_at"]
+        ["history_id", "track_internal_id", "track_name", "user_id", "gender", "region_code", "age_group", "played_at", "duration_sec", "platform"],
+        default=["history_id", "track_internal_id", "track_name", "user_id", "gender", "region_code", "platform", "played_at"]
     )
     
     if display_columns:
