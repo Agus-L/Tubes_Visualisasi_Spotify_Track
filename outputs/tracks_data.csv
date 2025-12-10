@@ -1,0 +1,101 @@
+track_id,track_name,duration_ms,album_name,genre_name,artist_count
+1,Comedy,230666,Comedy,acoustic,1
+2,Ghost - Acoustic,149610,Ghost (Acoustic),acoustic,1
+3,To Begin Again,210826,To Begin Again,acoustic,2
+4,Can't Help Falling In Love,201933,Crazy Rich Asians (OST),acoustic,1
+5,Hold On,198853,Hold On,acoustic,1
+6,Days I Will Remember,214240,Days I Will Remember,acoustic,1
+7,Say Something,218106,Is There Anybody Out There?,acoustic,1
+8,I'm Yours,242946,We Sing. We Dance. We Steal Things.,acoustic,1
+9,Hunger,205594,Hunger,acoustic,1
+10,Give Me Your Forever,215000,Episode,pop,1
+11,Mr. P-Mosh,257640,Tasty + B Sides,afrobeat,1
+12,Count It,177738,Vibes,afrobeat,1
+13,El Sirenito,235186,Tasty + B Sides,afrobeat,1
+14,La aparecida,276906,Sus primeras grabaciones 1992-1994,afrobeat,1
+15,Chan Chan,256000,Buena Vista Social Club,afrobeat,1
+16,Zombie,746000,Zombie,afrobeat,1
+17,On The Low,186000,African Giant,afrobeat,1
+18,Essence,240000,Made In Lagos,afrobeat,1
+19,Fall,200000,A Good Time,afrobeat,1
+20,Calm Down,219000,Rave & Roses,afrobeat,1
+21,Villa,165735,Adult Themes,afrobeat,1
+22,Savages (Part 2),135000,Pocahontas (OST/Japanese Version),disney,4
+23,Rudolph The Red-Nosed Reindeer,154466,Disney Jingle Bell Fun,disney,2
+24,Hip Hip Pooh Rah,88641,Lullaby Renditions of Winnie the Pooh,disney,1
+25,Rocking Chair Lullaby,169950,Dreamy Piano,disney,1
+26,Die letzte Vision,130639,Encanto (Deutscher Original Film-Soundtrack),disney,1
+27,We Don't Talk About Bruno,216000,Encanto (OST),disney,1
+28,Into the Unknown,194000,Frozen II,disney,1
+29,Do You Want to Build a Snowman?,207000,Frozen,disney,1
+30,I Can't Let You Throw Yourself Away,145000,Toy Story 4,disney,1
+31,En helt ny verden,161533,Aladdin (Originalt Norsk Soundtrack),disney,2
+32,Im Mondenschein,91466,Die bunte Seite des Monds,disney,3
+33,The Carnival of the Animals: Kangaroos,82208,Ferdinand the Bull and Friends,disney,3
+34,Bambi Gets Twitterpated,152293,Bambi,disney,3
+35,You Oughta Be Ashamed,70840,Dumbo,disney,2
+36,Tío Bruno,143133,Encanto (Trilha Sonora Original em Português),disney,1
+37,Circle of Life,240000,Encanto (OST),disney,1
+38,Hakuna Matata,210000,Encanto (OST),disney,1
+39,Let It Go,220000,Frozen,disney,1
+40,You've Got a Friend in Me,180000,Toy Story 4,disney,1
+41,Até Quando?,214645,Humanos,gospel,1
+42,Desta Vez Não,216400,Filho de Leão,gospel,1
+43,Diz,339707,Histórias e Bicicletas,gospel,1
+44,Tente Lembrar,201084,Seleção de Ouro,gospel,1
+45,Deus Cuida de Mim,245000,Deus Cuida de Mim,gospel,1
+46,Marca da Promessa,300000,Marca da Promessa,gospel,1
+47,Terremoto,280000,Terremoto,gospel,1
+48,Sabor de Mel,290000,Apocalipse,gospel,1
+49,Faz Chover,310000,Faz Chover,gospel,1
+50,Advogado Fiel,270000,Advogado Fiel,gospel,1
+51,O Espírito Do Senhor - Ao Vivo,319408,Memórias 2 (Ao Vivo),gospel,1
+52,Desapareceu um Povo,234666,Há uma Saída,gospel,1
+53,Corpo E Família - Ao Vivo,307000,Memórias 2 (Ao Vivo),gospel,2
+54,Ninguém Pode Impedir,239053,Uma Questão de Fé,gospel,1
+55,Raridade,300000,Raridade,gospel,1
+56,Ressuscita-me,280000,Graça,gospel,1
+57,Faz um Milagre em Mim,290000,Compromisso,gospel,1
+58,Com Muito Louvor,310000,Com Muito Louvor,gospel,1
+59,Ninguém Explica Deus,350000,Preto no Branco (Ao Vivo),gospel,1
+60,Lugar Secreto,320000,Pra Onde Iremos?,gospel,1
+61,Olha,215066,"Convida, Volume II",j-rock,2
+62,Yollar,170026,Asu Maralman (Türk Pop Tarihi),j-rock,1
+63,Love Is Strong,217426,Ways & Means,j-rock,1
+64,Sonbahardan Çizgiler,210800,Yeni Türkü Koleksiyon,j-rock,1
+65,Gülümse,280000,Gülümse,j-rock,1
+66,Düşler Sokağı,260000,Ebruli,j-rock,1
+67,Gülpembe,290000,Mançoloji,j-rock,1
+68,Tamirci Çırağı,300000,Merhaba Gençler ve Her Zaman Genç Kalanlar,j-rock,1
+69,Fesuphanallah,220000,Elektronik Türküler,j-rock,1
+70,Bi Şey Yapmalı,240000,Anadolu Pop,j-rock,1
+71,Just the Two of Us,438493,Anthology,jazz,2
+72,Feeling Good,237333,It's Time,jazz,1
+73,Sway,188066,Michael Bublé,jazz,1
+74,Kajra Re,482586,Bunty Aur Babli,indian,6
+75,Mauja Hi Mauja,244493,Jab We Met,indian,2
+76,Radha,341000,Student of the Year,indian,3
+77,Boy With Luv,229773,MAP OF THE SOUL : PERSONA,k-pop,2
+78,IDOL,223000,Love Yourself 結 'Answer',k-pop,1
+79,Dynamite,199054,Dynamite (DayTime Version),k-pop,1
+80,Life Goes On,207000,BE,k-pop,1
+81,I'll Never Not Love You,218390,Pop Hits Now,jazz,1
+82,Crazy Love,213610,Human - Best Adult Pop Tunes,jazz,1
+83,It's Beginning to Look a Lot Like Christmas,206346,Perfect Christmas Hits,jazz,1
+84,Love You Anymore,182666,Coffee Moment,jazz,1
+85,Christmas Lights,220000,Cuddle Up Christmas,jazz,1
+86,All I Want for Christmas Is You,231506,Christmas Music - Holiday Hits,jazz,1
+87,Home,225146,Feeling Good - Adult Pop Favorites,jazz,1
+88,White Christmas,204360,Christmas Sweets,jazz,1
+89,Holly Jolly Christmas,119840,Christmas Magic,jazz,1
+90,Santa Claus Is Coming to Town,171693,Christmas Magic,jazz,1
+91,Christmas Calling (Jolly Jones),200461,Rockin' Around The Christmas Tree 2022,jazz,1
+92,Wonderful Christmastime,215000,Christmas 2022,jazz,1
+93,Annul Maelae,322506,Vaaranam Aayiram (OST),pop,2
+94,Tu Mile Dil Khile,197716,Tu Mile Dil Khile - Single,pop,1
+95,Half of My Heart,250000,Half of My Heart,pop,2
+96,I Don't Care,219000,I Don't Care,pop,2
+97,Hello,295000,25,pop,1
+98,24K Magic,226000,24K Magic,pop,1
+99,Let Somebody Go,241000,Music Of The Spheres,pop,2
+100,Blinding Lights,200000,After Hours,pop,1
